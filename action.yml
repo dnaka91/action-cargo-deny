@@ -3,6 +3,11 @@ description: Run cargo-deny on your Rust code base
 branding:
   icon: slash
   color: red
+inputs:
+  checks:
+    description: The checks to run, or all if omitted.
+    required: false
+    default: ''
 runs:
   using: composite
   steps:
