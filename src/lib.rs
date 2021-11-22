@@ -9,6 +9,24 @@ pub mod cli;
 pub mod github;
 pub mod log;
 
+pub fn print_opt_info(opt: &Opt) {
+    println!("Will report {}s or worse", opt.report_level);
+    println!("Will fail on {}s or worse", opt.fail_level);
+    println!(
+        "Checks to perform: {}",
+        opt.cargo_deny
+            .checks
+            .iter()
+            .fold(String::new(), |mut buf, check| {
+                if !buf.is_empty() {
+                    buf.push_str(", ");
+                }
+                buf.push_str(check.as_ref());
+                buf
+            })
+    )
+}
+
 pub fn run(opt: Opt) -> Result<()> {
     let path = which::which("cargo-deny").context("failed finding `cargo-deny` binary")?;
     let mut cmd = Command::new(path);
