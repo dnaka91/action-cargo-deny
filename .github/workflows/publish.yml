@@ -22,7 +22,7 @@ jobs:
           command: build
           args: --release --target x86_64-unknown-linux-musl
       - name: Strip binary
-        run: strip --strip-all target/release/action-cargo-deny
+        run: strip --strip-all target/x86_64-unknown-linux-musl/release/action-cargo-deny
       - name: Create tarball
         run: |
           cd target/release
