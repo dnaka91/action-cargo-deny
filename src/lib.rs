@@ -1,15 +1,15 @@
 use std::{io::BufRead, process::Command};
 
 use anyhow::{bail, Context, Result};
-use cli::DenyOpt;
+use cli::Opt;
 use log::LogEntry;
-use strum::{EnumString, EnumVariantNames};
+use strum::{Display, EnumString, EnumVariantNames};
 
 pub mod cli;
 pub mod github;
 pub mod log;
 
-pub fn run(deny_opt: DenyOpt, max_level: PrintLevel) -> Result<()> {
+pub fn run(opt: Opt) -> Result<()> {
     let path = which::which("cargo-deny").context("failed finding `cargo-deny` binary")?;
     let mut cmd = Command::new(path);
     cmd.args([
@@ -21,14 +21,14 @@ pub fn run(deny_opt: DenyOpt, max_level: PrintLevel) -> Result<()> {
         "trace",
     ]);
 
-    if let Some(path) = deny_opt.manifest_path {
+    if let Some(path) = opt.cargo_deny.manifest_path {
         cmd.arg("--manifest-path");
         cmd.arg(path);
     }
 
     cmd.arg("check");
 
-    for check in deny_opt.checks {
+    for check in opt.cargo_deny.checks {
         cmd.arg(check.as_ref());
     }
 
@@ -44,11 +44,15 @@ pub fn run(deny_opt: DenyOpt, max_level: PrintLevel) -> Result<()> {
         );
     }
 
+    let mut found_level = None;
+
     for line in output.stderr.lines() {
         let entry = serde_json::from_str::<LogEntry>(&line?)?;
         let values = entry.print();
 
-        if max_level < values.level {
+        found_level = Some(found_level.unwrap_or(values.level).min(values.level));
+
+        if opt.report_level < values.level {
             continue;
         }
 
@@ -61,8 +65,13 @@ pub fn run(deny_opt: DenyOpt, max_level: PrintLevel) -> Result<()> {
         log_fn(values.title.as_deref(), &values.message);
     }
 
-    if !output.status.success() {
-       bail!("encountered errors");
+    if let Some(found_level) = found_level {
+        if opt.fail_level >= found_level {
+            bail!(
+                "failed due to finding one or more {}s or worse",
+                opt.fail_level
+            );
+        }
     }
 
     Ok(())
@@ -74,7 +83,7 @@ pub struct PrintValues {
     level: PrintLevel,
 }
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, EnumString, EnumVariantNames)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, EnumString, EnumVariantNames, Display)]
 #[strum(serialize_all = "lowercase")]
 pub enum PrintLevel {
     Error,

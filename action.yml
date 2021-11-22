@@ -8,6 +8,14 @@ inputs:
     description: The checks to run, or all if omitted.
     required: false
     default: ''
+  report_level:
+    description: The level which to report.
+    required: false
+    default: warning
+  fail_level:
+    description: The level at which to fail.
+    required: false
+    default: error
 runs:
   using: composite
   steps:
@@ -40,5 +48,9 @@ runs:
     run: cargo fetch
     shell: bash
   - name: Run cargo-deny
-    run: /usr/bin/action-cargo-deny ${{ inputs.checks }}
+    run: >
+      /usr/bin/action-cargo-deny
+        --report-level ${{ inputs.report_level }}
+        --fail-level ${{ inputs.fail_level }}
+        ${{ inputs.checks }}
     shell: bash

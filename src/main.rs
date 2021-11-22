@@ -3,6 +3,5 @@ use anyhow::Result;
 use structopt::StructOpt;
 
 fn main() -> Result<()> {
-    let opt = Opt::from_args();
-    action_cargo_deny::run(opt.deny, opt.level)
+    action_cargo_deny::run(Opt::from_args())
 }
