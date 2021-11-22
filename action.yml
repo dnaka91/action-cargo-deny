@@ -31,7 +31,7 @@ runs:
   - name: Install action-cargo-deny
     run: |
       curl -Lo /tmp/action-cargo-deny.tar.gz https://github.com/dnaka91/action-cargo-deny/releases/download/v0.1.2/action-cargo-deny-v0.1.2-x86_64-unknown-linux-musl.tar.gz
-      sudo tar -xzv -C /usr/bin --strip-components 1 -f /tmp/action-cargo-deny.tar.gz action-cargo-deny
+      sudo tar -xzv -C /usr/bin -f /tmp/action-cargo-deny.tar.gz action-cargo-deny
       rm /tmp/action-cargo-deny.tar.gz
     shell: bash
   - name: Fetch registry
