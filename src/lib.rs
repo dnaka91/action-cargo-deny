@@ -61,6 +61,10 @@ pub fn run(deny_opt: DenyOpt, max_level: PrintLevel) -> Result<()> {
         log_fn(values.title.as_deref(), &values.message);
     }
 
+    if !output.status.success() {
+       bail!("encountered errors");
+    }
+
     Ok(())
 }
 
