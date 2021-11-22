@@ -1,0 +1,37 @@
+name: cargo-deny
+description: Run cargo-deny on your Rust code base
+branding:
+  icon: slash
+  color: red
+runs:
+  using: composite
+  steps:
+  - name: Ensure runner OS is 64-bit Linux
+    run: |
+      if [[ "$(uname -s)" != *"Linux"* ]]; then
+        echo "::error ::The OS of the runner must be Linux"
+        exit 1
+      fi
+      if [[ "$(uname -p)" != *"x86_64"* ]]; then
+        echo "::error ::The OS architecture of the runner must be x86_64"
+        exit 1
+      fi
+    shell: bash
+  - name: Install cargo-deny
+    run: |
+      curl -Lo /tmp/cargo-deny.tar.gz https://github.com/EmbarkStudios/cargo-deny/releases/download/0.10.2/cargo-deny-0.10.2-x86_64-unknown-linux-musl.tar.gz
+      tar -xzv -C /usr/bin --strip-components 1 /tmp/cargo-deny.tar.gz
+      rm /tmp/cargo-deny.tar.gz
+    shell: bash
+  - name: Install action-cargo-deny
+    run: |
+      curl -Lo /tmp/action-cargo-deny.tar.gz https://github.com/dnaka91/action-cargo-deny/releases/download/0.1.0/action-cargo-deny-0.1.0-x86_64-unknown-linux-musl.tar.gz
+      tar -xzv -C /usr/bin --strip-components 1 /tmp/action-cargo-deny.tar.gz
+      rm /tmp/action-cargo-deny.tar.gz
+    shell: bash
+  - name: Fetch registry
+    run: cargo fetch
+    shell: bash
+  - name: Run cargo-deny
+    run: /usr/bin/action-cargo-deny ${{ inputs.checks }}
+    shell: bash

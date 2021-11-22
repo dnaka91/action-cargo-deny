@@ -1,0 +1,19 @@
+[package]
+name = "action-cargo-deny"
+version = "0.1.0"
+authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
+description = "Run cargo-deny and transform the output to annotations for GitHub Actions"
+edition = "2021"
+license = "AGPL-3.0-only"
+
+[dependencies]
+anyhow = "1.0.44"
+percent-encoding = "2.1.0"
+serde = { version = "1.0.130", features = ["derive"] }
+serde_json = "1.0.71"
+structopt = "0.3.25"
+strum = { version = "0.23.0", features = ["derive"] }
+which = "4.2.2"
+
+[profile.release]
+lto = true
