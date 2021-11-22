@@ -2,12 +2,12 @@ use std::{io::BufRead, process::Command};
 
 use anyhow::{bail, Context, Result};
 use cli::Opt;
-use log::LogEntry;
+use parse::Event;
 use strum::{Display, EnumString, EnumVariantNames};
 
 pub mod cli;
 pub mod github;
-pub mod log;
+pub mod parse;
 
 pub fn print_opt_info(opt: &Opt) {
     println!("Will report {}s or worse", opt.report_level);
@@ -65,11 +65,11 @@ pub fn run(opt: Opt) -> Result<()> {
     let mut found_level = None;
 
     for line in output.stderr.lines() {
-        let values = match serde_json::from_str::<LogEntry>(&line?)? {
-            LogEntry::Diagnostic(diagnostic) => diagnostic.print(),
-            LogEntry::Summary(summary) => summary.print(),
-            LogEntry::Log(log) => {
-                println!("{}", log.print());
+        let values = match serde_json::from_str::<Event>(&line?)? {
+            Event::Diagnostic(diagnostic) => diagnostic.print(),
+            Event::Summary(summary) => summary.print(),
+            Event::Log(log) => {
+                println!("{}", log);
                 continue;
             }
         };
