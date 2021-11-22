@@ -25,8 +25,8 @@ jobs:
         run: strip --strip-all target/x86_64-unknown-linux-musl/release/action-cargo-deny
       - name: Create tarball
         run: |
-          cd target/release
-          tar czf ../action-cargo-deny-${{ github.ref_name }}-x86_64-unknown-linux-musl.tar.gz action-cargo-deny
+          cd target/x86_64-unknown-linux-musl/release
+          tar czf ../../action-cargo-deny-${{ github.ref_name }}-x86_64-unknown-linux-musl.tar.gz action-cargo-deny
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
