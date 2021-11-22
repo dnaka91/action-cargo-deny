@@ -47,7 +47,7 @@ impl Diagnostic {
         }
 
         if !self.graphs.is_empty() {
-            buf.push_str("\nDependency graph:\n");
+            buf.push_str("\nDependency graph:\n\n");
         }
 
         for graph in &self.graphs {
@@ -56,7 +56,7 @@ impl Diagnostic {
         }
 
         if let Some(advisory) = &self.advisory {
-            buf.push_str("Advisory:\n");
+            buf.push_str("\nAdvisory:\n\n");
             buf.push_str(&advisory.print());
         }
 
@@ -224,11 +224,11 @@ struct Advisory {
 impl Advisory {
     fn print(&self) -> String {
         format!(
-            "{}\n\n{}\n\nID: {}\nIssue: {}",
+            "ID: {}\nIssue: {}\n\n{}\n\n{}",
+            self.id,
+            self.url.as_deref().unwrap_or("<none>"),
             self.title,
             self.description,
-            self.id,
-            self.url.as_deref().unwrap_or("<none>")
         )
     }
 }
