@@ -48,9 +48,9 @@ runs:
     run: cargo fetch
     shell: bash
   - name: Run cargo-deny
-    run: >
-      /usr/bin/action-cargo-deny
-        --report-level ${{ inputs.report_level }}
-        --fail-level ${{ inputs.fail_level }}
+    run: |
+      /usr/bin/action-cargo-deny \
+        --report-level ${{ inputs.report_level }} \
+        --fail-level ${{ inputs.fail_level }} \
         ${{ inputs.checks }}
     shell: bash
