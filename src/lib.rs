@@ -34,12 +34,6 @@ pub fn run(deny_opt: DenyOpt, max_level: PrintLevel) -> Result<()> {
 
     let output = cmd.output().context("failed running `cargo-deny`")?;
 
-    println!(
-        "STDOUT: {}\nSTDERR: {}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-
     match output.status.code() {
         None => return Ok(()),
         Some(1) => (),

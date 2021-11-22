@@ -23,6 +23,7 @@ impl LogEntry {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Diagnostic {
@@ -30,7 +31,10 @@ pub struct Diagnostic {
     graphs: Vec<Graph>,
     labels: Vec<Label>,
     message: String,
+    #[serde(default)]
+    notes: Vec<String>,
     severity: Severity,
+    advisory: Option<Advisory>,
 }
 
 impl Diagnostic {
@@ -188,6 +192,27 @@ impl Display for Severity {
             Self::Help => "help",
         })
     }
+}
+
+#[allow(dead_code)]
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Advisory {
+    id: String,
+    package: String,
+    title: String,
+    description: String,
+    date: String,
+    aliases: Vec<String>,
+    related: Vec<String>,
+    collection: Option<String>,
+    categories: Vec<String>,
+    keywords: Vec<String>,
+    cvss: Option<String>,
+    informational: Option<String>,
+    url: Option<String>,
+    references: Vec<String>,
+    withdrawn: Option<String>,
 }
 
 #[derive(Deserialize)]
