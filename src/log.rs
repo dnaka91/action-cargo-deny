@@ -55,6 +55,11 @@ impl Diagnostic {
             buf.push('\n');
         }
 
+        if let Some(advisory) = &self.advisory {
+            buf.push_str("Advisory:\n");
+            buf.push_str(&advisory.print());
+        }
+
         PrintValues {
             title: Some(format!(
                 "{}[{}]: {}",
@@ -158,11 +163,12 @@ impl Default for DepKind {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize)]
-// #[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields)]
 struct Label {
-    // line: usize,
-    // column: usize,
+    line: usize,
+    column: usize,
     span: String,
     message: String,
 }
@@ -195,7 +201,7 @@ impl Display for Severity {
 }
 
 #[allow(dead_code)]
-#[derive(Deserialize)]
+#[derive(serde::Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct Advisory {
     id: String,
@@ -215,12 +221,28 @@ struct Advisory {
     withdrawn: Option<String>,
 }
 
+impl Advisory {
+    fn print(&self) -> String {
+        format!(
+            "{}\n\n{}\n\nID: {}\nIssue: {}",
+            self.title,
+            self.description,
+            self.id,
+            self.url.as_deref().unwrap_or("<none>")
+        )
+    }
+}
+
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Summary {
+    #[serde(default)]
     advisories: Stats,
+    #[serde(default)]
     bans: Stats,
+    #[serde(default)]
     licenses: Stats,
+    #[serde(default)]
     sources: Stats,
 }
 
@@ -240,7 +262,7 @@ impl Summary {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Default, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct Stats {
     errors: u32,

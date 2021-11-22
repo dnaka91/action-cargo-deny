@@ -33,18 +33,15 @@ pub fn run(deny_opt: DenyOpt, max_level: PrintLevel) -> Result<()> {
     }
 
     let output = cmd.output().context("failed running `cargo-deny`")?;
+    let status = output.status.code().unwrap_or_default();
 
-    match output.status.code() {
-        None => return Ok(()),
-        Some(1) => (),
-        Some(code) => {
-            let stderr = String::from_utf8_lossy(&output.stderr);
-            bail!(
-                "failed running cargo-deny, exited with status code {}\n\n{}",
-                code,
-                stderr
-            );
-        }
+    if status > 1 {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        bail!(
+            "failed running cargo-deny, exited with status code {}\n\n{}",
+            status,
+            stderr
+        );
     }
 
     for line in output.stderr.lines() {
