@@ -25,13 +25,13 @@ runs:
   - name: Install cargo-deny
     run: |
       curl -Lo /tmp/cargo-deny.tar.gz https://github.com/EmbarkStudios/cargo-deny/releases/download/0.10.2/cargo-deny-0.10.2-x86_64-unknown-linux-musl.tar.gz
-      tar -xv -C /usr/bin --strip-components 1 -f /tmp/cargo-deny.tar.gz cargo-deny-0.10.2-x86_64-unknown-linux-musl/cargo-deny
+      sudo tar -xv -C /usr/bin --strip-components 1 -f /tmp/cargo-deny.tar.gz cargo-deny-0.10.2-x86_64-unknown-linux-musl/cargo-deny
       rm /tmp/cargo-deny.tar.gz
     shell: bash
   - name: Install action-cargo-deny
     run: |
       curl -Lo /tmp/action-cargo-deny.tar.gz https://github.com/dnaka91/action-cargo-deny/releases/download/v0.1.2/action-cargo-deny-v0.1.2-x86_64-unknown-linux-musl.tar.gz
-      tar -xzv -C /usr/bin --strip-components 1 -f /tmp/action-cargo-deny.tar.gz action-cargo-deny
+      sudo tar -xzv -C /usr/bin --strip-components 1 -f /tmp/action-cargo-deny.tar.gz action-cargo-deny
       rm /tmp/action-cargo-deny.tar.gz
     shell: bash
   - name: Fetch registry

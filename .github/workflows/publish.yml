@@ -50,5 +50,5 @@ jobs:
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "checksums.sha256,artifact-*/*"
+          artifacts: "~/checksums.sha256,artifact-*/*"
           token: ${{ secrets.GITHUB_TOKEN }}
