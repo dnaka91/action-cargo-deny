@@ -13,16 +13,6 @@ pub enum LogEntry {
     Log(Log),
 }
 
-impl LogEntry {
-    pub fn print(&self) -> PrintValues {
-        match self {
-            Self::Diagnostic(d) => d.print(),
-            Self::Summary(s) => s.print(),
-            Self::Log(l) => l.print(),
-        }
-    }
-}
-
 #[allow(dead_code)]
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -249,9 +239,9 @@ pub struct Summary {
 impl Summary {
     pub fn print(&self) -> PrintValues {
         PrintValues {
-            title: Some("Statistics".to_owned()),
+            title: None,
             message: format!(
-                "{}\n{}\n{}\n{}",
+                "Statistics:\n{}\n{}\n{}\n{}",
                 self.advisories.print("advisories"),
                 self.bans.print("bans"),
                 self.licenses.print("licenses"),
@@ -293,12 +283,8 @@ pub struct Log {
 }
 
 impl Log {
-    pub fn print(&self) -> PrintValues {
-        PrintValues {
-            title: None,
-            message: format!("{} [{:>5}] {}", self.timestamp, self.level, self.message),
-            level: PrintLevel::Notice,
-        }
+    pub fn print(&self) -> String {
+        format!("{} [{:>5}] {}", self.timestamp, self.level, self.message)
     }
 }
 

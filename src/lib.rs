@@ -65,8 +65,14 @@ pub fn run(opt: Opt) -> Result<()> {
     let mut found_level = None;
 
     for line in output.stderr.lines() {
-        let entry = serde_json::from_str::<LogEntry>(&line?)?;
-        let values = entry.print();
+        let values = match serde_json::from_str::<LogEntry>(&line?)? {
+            LogEntry::Diagnostic(diagnostic) => diagnostic.print(),
+            LogEntry::Summary(summary) => summary.print(),
+            LogEntry::Log(log) => {
+                println!("{}", log.print());
+                continue;
+            }
+        };
 
         found_level = Some(found_level.unwrap_or(values.level).min(values.level));
 
