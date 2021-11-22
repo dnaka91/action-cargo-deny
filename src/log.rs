@@ -72,6 +72,7 @@ impl Diagnostic {
 struct Code(String);
 
 impl Code {
+    #[allow(dead_code)]
     fn category(&self) -> Option<Category> {
         self.0
             .chars()
@@ -87,6 +88,7 @@ impl Code {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy)]
 enum Category {
     Advisories,
