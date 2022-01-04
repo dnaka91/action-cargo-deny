@@ -1,32 +1,32 @@
 use std::path::PathBuf;
 
-use structopt::{clap::AppSettings, StructOpt};
-use strum::{AsRefStr, EnumString, EnumVariantNames, VariantNames};
+use clap::{ArgEnum, Args, Parser};
+use strum::AsRefStr;
 
 use crate::PrintLevel;
 
-#[derive(StructOpt)]
-#[structopt(about, author, global_setting = AppSettings::ColoredHelp)]
+#[derive(Parser)]
+#[clap(about, author, version)]
 pub struct Opt {
-    #[structopt(flatten)]
+    #[clap(flatten)]
     pub cargo_deny: CargoDenyOpt,
-    #[structopt(long, default_value = "warning", possible_values = PrintLevel::VARIANTS)]
+    #[clap(long, arg_enum, default_value_t = PrintLevel::Warning)]
     pub report_level: PrintLevel,
-    #[structopt(long, default_value = "error", possible_values = PrintLevel::VARIANTS)]
+    #[clap(long, arg_enum, default_value_t = PrintLevel::Error)]
     pub fail_level: PrintLevel,
 }
 
-#[derive(StructOpt)]
+#[derive(Args)]
 pub struct CargoDenyOpt {
     /// The path of a Cargo.toml to use as the context for the operation.
-    #[structopt(long)]
+    #[clap(long)]
     pub manifest_path: Option<PathBuf>,
     /// The check(s) to perform.
-    #[structopt(possible_values = Check::VARIANTS)]
+    #[clap(arg_enum)]
     pub checks: Vec<Check>,
 }
 
-#[derive(Clone, Copy, EnumString, EnumVariantNames, AsRefStr)]
+#[derive(Clone, Copy, ArgEnum, AsRefStr)]
 #[strum(serialize_all = "lowercase")]
 pub enum Check {
     Advisories,

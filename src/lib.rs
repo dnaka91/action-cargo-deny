@@ -1,9 +1,10 @@
 use std::{io::BufRead, process::Command};
 
 use anyhow::{bail, Context, Result};
+use clap::ArgEnum;
 use cli::Opt;
 use parse::Event;
-use strum::{Display, EnumString, EnumVariantNames};
+use strum::Display;
 
 pub mod cli;
 pub mod github;
@@ -107,7 +108,7 @@ pub struct PrintValues {
     level: PrintLevel,
 }
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, EnumString, EnumVariantNames, Display)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, ArgEnum, Display)]
 #[strum(serialize_all = "lowercase")]
 pub enum PrintLevel {
     Error,

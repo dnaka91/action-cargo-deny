@@ -10,7 +10,7 @@ mod summary;
 #[serde(rename_all = "lowercase", tag = "type", content = "fields")]
 #[serde(deny_unknown_fields)]
 pub enum Event {
-    Diagnostic(Diagnostic),
+    Diagnostic(Box<Diagnostic>),
     Summary(Summary),
     Log(Log),
 }
