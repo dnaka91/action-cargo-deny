@@ -64,17 +64,13 @@ struct Code(String);
 impl Code {
     #[allow(dead_code)]
     fn category(&self) -> Option<Category> {
-        self.0
-            .chars()
-            .next()
-            .map(|c| match c {
-                'a' | 'A' => Some(Category::Advisories),
-                'b' | 'B' => Some(Category::Bans),
-                'l' | 'L' => Some(Category::Licenses),
-                's' | 'S' => Some(Category::Sources),
-                _ => None,
-            })
-            .flatten()
+        self.0.chars().next().and_then(|c| match c {
+            'a' | 'A' => Some(Category::Advisories),
+            'b' | 'B' => Some(Category::Bans),
+            'l' | 'L' => Some(Category::Licenses),
+            's' | 'S' => Some(Category::Sources),
+            _ => None,
+        })
     }
 }
 
