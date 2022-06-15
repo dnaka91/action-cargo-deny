@@ -10,19 +10,19 @@ use crate::PrintLevel;
 pub struct Opt {
     #[clap(flatten)]
     pub cargo_deny: CargoDenyOpt,
-    #[clap(long, value_parser, value_enum, default_value_t = PrintLevel::Warning)]
+    #[clap(long, value_enum, default_value_t = PrintLevel::Warning)]
     pub report_level: PrintLevel,
-    #[clap(long, value_parser, value_enum, default_value_t = PrintLevel::Error)]
+    #[clap(long, value_enum, default_value_t = PrintLevel::Error)]
     pub fail_level: PrintLevel,
 }
 
 #[derive(Args)]
 pub struct CargoDenyOpt {
     /// The path of a Cargo.toml to use as the context for the operation.
-    #[clap(long, value_parser)]
+    #[clap(long)]
     pub manifest_path: Option<PathBuf>,
     /// The check(s) to perform.
-    #[clap(value_parser, value_enum)]
+    #[clap(value_enum)]
     pub checks: Vec<Check>,
 }
 

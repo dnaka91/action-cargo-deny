@@ -1,7 +1,7 @@
 use std::{io::BufRead, process::Command};
 
 use anyhow::{bail, Context, Result};
-use clap::ArgEnum;
+use clap::ValueEnum;
 use cli::Opt;
 use parse::Event;
 use strum::Display;
@@ -108,7 +108,7 @@ pub struct PrintValues {
     level: PrintLevel,
 }
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, ArgEnum, Display)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Display, ValueEnum)]
 #[strum(serialize_all = "lowercase")]
 pub enum PrintLevel {
     Error,
