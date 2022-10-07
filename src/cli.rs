@@ -6,23 +6,23 @@ use strum::AsRefStr;
 use crate::PrintLevel;
 
 #[derive(Parser)]
-#[clap(about, author, version)]
+#[command(about, author, version)]
 pub struct Opt {
-    #[clap(flatten)]
+    #[command(flatten)]
     pub cargo_deny: CargoDenyOpt,
-    #[clap(long, value_enum, default_value_t = PrintLevel::Warning)]
+    #[arg(long, value_enum, default_value_t = PrintLevel::Warning)]
     pub report_level: PrintLevel,
-    #[clap(long, value_enum, default_value_t = PrintLevel::Error)]
+    #[arg(long, value_enum, default_value_t = PrintLevel::Error)]
     pub fail_level: PrintLevel,
 }
 
 #[derive(Args)]
 pub struct CargoDenyOpt {
     /// The path of a Cargo.toml to use as the context for the operation.
-    #[clap(long)]
+    #[arg(long)]
     pub manifest_path: Option<PathBuf>,
     /// The check(s) to perform.
-    #[clap(value_enum)]
+    #[arg(value_enum)]
     pub checks: Vec<Check>,
 }
 
